@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natt</title>
+    <link rel="icon" href="hello.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%; /* Garante que o body ocupe 100% da altura da janela */
+            width: 100%; /* Garante que o body ocupe 100% da largura da janela */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: url('natt.png') no-repeat center center fixed;
+            background-size: cover;
+            overflow-x: hidden; /* Impede rolagem horizontal */
+        }
+
+        .header {
+            display: flex;
+            align-items: center; /* Alinha verticalmente o conteúdo */
+            width: 100%;
+            max-width: 1200px; /* Limita o tamanho do conteúdo */
+            padding: 20px;
+            position: absolute;
+            top: 0;
+            left: 0; /* Alinhamento à esquerda */
+            justify-content: flex-end; /* Alinhamento do conteúdo à direita */
+        }
+
+        .open-sidebar {
+            position: relative; /* Ajustado para ficar ao lado do nome */
+            z-index: 4;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 40px; /* Ajuste conforme necessário */
+            height: 30px; /* Ajuste conforme necessário */
+            margin-right: 40px; /* Espaçamento adicional */
+        }
+
+        .line {
+            width: 100%; /* Faz as linhas ocuparem toda a largura do botão */
+            height: 6px; /* Altura das linhas */
+            background: white; /* Cor das linhas */
+            border-radius: 5px; /* Bordas arredondadas */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.7); /* Sombra para dar um efeito 3D */
+        }
+
+        .menu {
+            display: none; /* Oculta o menu inicialmente */
+            flex-direction: column;
+            position: absolute; /* Para ocupar toda a tela */
+            top: 60px; /* Inicia do topo */
+            right: 55px; /* Alinhado à direita */
+            border-radius: 5px; /* Bordas arredondadas */
+            padding: 10px; /* Espaçamento interno */
+            z-index: 3; /* Acima do fundo */
+            min-width: 120px; /* Largura mínima reduzida */
+            background: url('natt.png') no-repeat center center; /* Usando a mesma imagem de fundo */
+            background-size: cover; /* Ajusta a imagem de fundo */
+            border: 5px solid transparent; /* Borda transparente */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra para dar profundidade */
+        }
+
+        .menu a {
+            color: white;
+            font-family: 'Roboto', sans-serif; /* Usando a fonte Roboto */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            text-decoration: none;
+            font-size: 14px; /* Tamanho da fonte para mobile reduzido */
+            padding: 8px 15px; /* Padding para os links reduzido */
+            transition: background-color 0.3s; /* Transição suave */
+        }
+
+        .menu a:hover {
+            background-color: rgba(255, 255, 255, 0.2); /* Efeito de hover */
+            border-radius: 5px; /* Borda arredondada no hover */
+        }
+
+        /* Estilos para mobile */
+        @media (max-width: 768px) {
+            .menu {
+                display: none; /* Oculta o menu por padrão */
+            }
+
+            .menu.active {
+                display: flex; /* Mostra o menu ao ativar */
+            }
+
+            .menu a {
+                padding: 10px 20px; /* Padding para os links */
+            }
+        }
+
+        /* Estilos para desktop */
+        @media (min-width: 769px) {
+            .open-sidebar {
+                display: none; /* Não exibe o botão hamburguer em telas grandes */
+            }
+
+            .menu {
+                display: flex; /* Exibe o menu */
+                flex-direction: row; /* Alinhamento horizontal */
+                right: -660px; /* Mover o menu mais para a direita */
+                top: 20px; /* Ajustar a posição vertical */
+                padding: 10px; /* Espaçamento interno */
+                background: url('natt.png') no-repeat center center; /* Usando a mesma imagem de fundo */
+                background-size: cover; /* Ajusta a imagem de fundo */
+                border: 5px solid transparent; /* Borda transparente */
+            }
+
+            .menu a {
+                font-size: 16px; /* Tamanho da fonte reduzido */
+                padding: 10px 20px; /* Aumentando o padding */
+                margin-left: 10px; /* Espaçamento entre os links */
+            }
+        }
+
+        /* Estilo do texto mobile */
+        .mobile-text {
+            position: absolute; /* Para posicionar o texto */
+            left: 5%; /* Distância da esquerda */
+            top: 60%; /* Ajustado para descer mais na tela */
+            color: white; /* Cor do texto */
+            font-family: 'Roboto', sans-serif; /* Usando a fonte Roboto */
+            font-size: 16px; /* Tamanho do texto menor */
+            line-height: 1.4; /* Altura da linha para melhor legibilidade */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Sombra para melhorar a legibilidade */
+            display: none; /* Oculta por padrão */
+            text-align: left; /* Alinha o texto à esquerda */
+            padding: 10px; /* Espaçamento interno do texto */
+            max-width: 90%; /* Limita a largura do texto */
+            overflow: auto; /* Permite rolagem se o texto for longo */
+            transition: opacity 0.5s; /* Transição suave de opacidade */
+        }
+
+        /* Exibe o texto apenas em dispositivos móveis */
+        @media (max-width: 768px) {
+            .mobile-text {
+                display: block; /* Mostra o texto em dispositivos móveis */
+            }
+        }
+
+        .visible {
+            display: block; /* Exibe o texto */
+            opacity: 1; /* Opacidade completa */
+        }
+
+        .hidden {
+            display: block; /* Exibe o texto, mas esconde sua visibilidade */
+            opacity: 0; /* Opacidade invisível */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="open-sidebar" onclick="toggleSidebar()">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </button>
+        <div class="menu" id="menu">
+            <a href="https://online.fliphtml5.com/vgomm/mkzk/">Livro</a>
+            <a href="Flor.html">Flor</a>
+            <a href="Mygirl.html">My girl</a>
+        </div>
+    </div>
+    
+    <!-- Texto no meio da página -->
+    <div class="mobile-text hidden" id="mobileText">
+        oioi amor ❤️
+        <p>
+            Quero dizer que desde que eu te conheci, eu me apaixonei por vc. Minha vida tomou outro rumo e esse rumo é o melhor caminho que eu poderia ter encontrado. Desde então, os dias cinzas viraram coloridos.
+            O sorriso que antes nem existia, hoje ele é estampado em meu rosto! Você se tornou minha calmaria, meu lar e meu lugar! Obrigado por existir e me trazer paz! Estarei com você pra sempre ❤️
+            obrigado por sempre me fazer bem e me tratar bem. Eu quero que você saiba que ninguém NUNCA vai tomar o seu lugar, pois não existe ninguém que me faz tão bem como você. Eu quero que você saiba que eu
+            não vou ser o homem que vai te trair ou te deixar. Não sei se é possível se apaixonar pela mesma pessoa todos os dias, mas eu me sinto assim. Quando falo com você, sinto uma conexão de outro mundo. Te quero porque quero cuidar de você e mostrar que nem todos vão embora. Quero te mostrar
+        </p>
+        <p>meu verdadeiro amor.</p>
+        <p>Eu te amo Natt</p>
+    </div>
+
+    <script>
+        let lastScrollTop = 0; // Armazena a última posição de rolagem
+
+        function toggleSidebar() {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('active'); // Alterna a classe 'active' para mostrar/esconder o menu
+        }
+
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY; // Posição atual da rolagem
+            const mobileText = document.getElementById('mobileText'); // Referência ao texto mobile
+
+            if (scrollTop > lastScrollTop) {
+                // Rolando para baixo
+                mobileText.classList.remove('hidden');
+                mobileText.classList.add('visible');
+            } else {
+                // Rolando para cima
+                mobileText.classList.add('hidden');
+                mobileText.classList.remove('visible');
+            }
+            lastScrollTop = scrollTop; // Atualiza a posição da última rolagem
+        });
+    </script>
+</body>
+</html>
